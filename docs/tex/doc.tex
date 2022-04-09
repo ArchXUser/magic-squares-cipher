@@ -1,0 +1,161 @@
+\documentclass[utf8x, 14pt, bold, times]{G7-32} % Стиль (по умолчанию будет 14pt)
+
+\include{preamble}
+
+\begin{document}
+
+\frontmatter % выключает нумерацию ВСЕГО; здесь начинаются ненумерованные главы: реферат, введение, глоссарий, сокращения и прочее.
+
+\include{info}
+\include{mytitle}
+\maketitle
+
+\newpage
+\tableofcontents
+
+\nobreakingbeforechapters
+%\breakingbeforechapters
+
+\newpage
+\Introduction
+
+\textbf{Цель работы:}
+
+\begin{itemize}
+\item познакомиться с основами симметричного шифрования;
+\item познакомиться с простыми симметричными криптографическими
+      шифрами на основе методов подстановок, перестановок и гаммирования;
+\item освоить основные этапы проектирования и реализации симметричных
+      шифров.
+\end{itemize}
+
+\textbf{Задание на работу:}
+
+\begin{itemize}
+\item разработать и составить в виде блок-схемы алгоритмы шифрования и дешифрования текста
+      на на основе <<магических>> квадратов размерностью $N \times N$;
+\item убедиться в правильности составления алгоритмов и затем на языке
+      программирования составить программу, которая реализует данные алгоритмы;
+\item на ряде контрольных примеров (не менее 10) открытого текста, состоящего
+      из различного количества символов, проверить правильность работы алгоритмов
+      шифрования и дешифрования;
+\item разработанная программа должна содержать графический интерфейс пользователя.
+\end{itemize}
+
+
+\mainmatter % это включает нумерацию глав и секций в документе ниже
+\newpage
+
+\chapter{Описание алгоритма}
+
+\section{Алгоритм шифрования}
+
+\begin{itemize}
+\item Создать пустую строку $cipher$ для хранения зашифрованного текста;
+\item Определить длину $l$ исходного текста;
+\item Вычислить корень из длины текста и округлить вверх.
+      Получим порядок квадрата $n = \lceil \sqrt{l} \rceil$; 
+\item Сгенерировать магический квадрат порядка $n$;
+\item Пройти по магическому квадрату сверху вниз ($i$ - номер строки),
+      слева направо ($j$ - номер столбца). При этом, если значение
+      $a_{i,j}$ меньше или равно длине сообщения ($a_{i,j} <= l$),
+      добавить символ, стоящий в исходном тексте на месте $a_{i,j}-1$,
+      в конец строки $cipher$. 
+\end{itemize}
+
+Блок-схема представлена на рисунке \ref{ris:magic-square-encrypt}.
+
+\vspace{\baselineskip}
+\begin{figure}[H]
+\center{\includegraphics[width=0.5\linewidth]{figures/magic-square-encrypt}}
+    \caption{Блок-схема алгоритма шифрования на основе <<магических>> квадратов}
+\label{ris:magic-square-encrypt}
+\end{figure}
+
+\section{Алгоритм расшифрования}
+
+\begin{itemize}
+\item Определить длину $l$ зашифрованного текста;
+\item Создать строку $text$ длиной $l$ для хранения расшифрованного текста,
+      а также счетчик количества символов в строке $c=0$;
+\item Вычислить корень из длины текста и округлить вверх.
+      Получим порядок квадрата $n = \lceil \sqrt{l} \rceil$; 
+\item Сгенерировать магический квадрат порядка $n$;
+\item Пройти по магическому квадрату сверху вниз ($i$ - номер строки),
+      слева направо ($j$ - номер столбца). При этом, если значение
+      $a_{i,j}$ меньше или равно длине сообщения ($a_{i,j} <= l$),
+      добавить символ, стоящий в зашифрованном тексте на месте $c$,
+      в $text$ на место $a_{i,j}-1$. После этого увеличить $c$ на 1. 
+\end{itemize}
+
+Блок-схема представлена на рисунке \ref{ris:magic-square-decrypt}.
+
+\vspace{\baselineskip}
+\begin{figure}[H]
+\center{\includegraphics[width=0.5\linewidth]{figures/magic-square-decrypt}}
+    \caption{Блок-схема алгоритма расшифрования на основе <<магических>> квадратов}
+\label{ris:magic-square-decrypt}
+\end{figure}
+
+\chapter{Оценка алгоритма}
+
+Легко определить и взломать частотным анализом. А также
+для передачи ключа необходимо иметь защищенный канал связи.
+
+\chapter{Примеры работы программы}
+
+\section{Пример 1}
+
+\input{test-data-1}
+
+\section{Пример 2}
+
+\input{test-data-2}
+
+\section{Пример 3}
+
+\input{test-data-3}
+
+\section{Пример 4}
+
+\input{test-data-4}
+
+\section{Пример 5}
+
+\input{test-data-5}
+
+\chapter{Исходный код}
+
+\section{textencryptor.h}
+
+\inputminted[fontsize=\footnotesize, breaklines]{cpp}{../../src/textencryptor.h}
+
+\section{textencryptor.cpp}
+
+\inputminted[fontsize=\footnotesize, breaklines]{cpp}{../../src/textencryptor.cpp}
+
+\section{mainwindow.h}
+
+\inputminted[fontsize=\footnotesize, breaklines]{cpp}{../../src/mainwindow.h}
+
+\section{mainwindow.cpp}
+
+\inputminted[fontsize=\footnotesize, breaklines]{cpp}{../../src/mainwindow.cpp}
+
+\section{magicsquare.h}
+
+\inputminted[fontsize=\footnotesize, breaklines]{cpp}{../../src/magicsquare.h}
+
+\section{magicsquare.cpp}
+
+\inputminted[fontsize=\footnotesize, breaklines]{cpp}{../../src/magicsquare.cpp}
+
+\backmatter %% Здесь заканчивается нумерованная часть документа и начинаются ссылки и
+
+\newpage
+\Conclusion
+
+В ходе работы изучил простые симметричные шифры на основе методов подстановок
+и перестановок, а также их недостатки и преимущества. 
+
+\end{document}
